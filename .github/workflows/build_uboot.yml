@@ -41,10 +41,25 @@ jobs:
       - name: Build U-Boot
         run: |
           set -xe
+          echo "--- FPM Diagnostics ---"
+          fpm --version
+          fpm --help | head -n 30
+          echo "------------------------"
+          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
+          set -xe
+          echo "--- FPM Diagnostic ---"
+          fpm --version
+          fpm --help | head -n 20
+          echo "----------------------"
+          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
+          set -xe
+          echo "Executing BSP build..."
+          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
+          set -xe
           ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: u-boot-radxa-cm3-rpi-cm4-io-deb
-          path: ./*.deb
+          path: .src/u-boot/.output/*.deb
