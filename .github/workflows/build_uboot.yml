@@ -21,11 +21,12 @@ jobs:
       - name: Install Python and Ruby dependencies
         run: |
           pip3 install pyelftools --break-system-packages
-          gem install fpm
+          gem install fpm --user-install
 
       - name: Setup Environment
         run: |
           export CROSS_COMPILE=aarch64-linux-gnu-
+          export PATH="/home/kazys/.gem/ruby/bin:$PATH"
           chmod +x bsp
 
       - name: Build U-Boot
