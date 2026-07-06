@@ -1,4 +1,4 @@
-name: Build U-Boot Rawsa CM3
+name: Build U-Boot Raxa CM3
 
 on:
   push:
@@ -45,14 +45,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: u-boot-radxa-cm3-rpi-cm4-io-deb
-          path: .src/u-boot/configs/radxa-cm3-rpi-cm4-io-rk3566_defconfig
-
-      - name: Create Release (Optional)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: softprop/action-gh-release@v1
-        with:
-          files: .src/u-boot/configs/radxa-cm3-rpi-cm4-io-rk3566_defconfig
-        tag_name: v${{ github.run_number }}
-        notes: Build for Radxa CM3 (SPI Flash primary, 3.3V SD support)
-        draft: false
-        prerelease: false
+          path: .output/*.deb
