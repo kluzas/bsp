@@ -16,18 +16,12 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y             git             python3-pip             flex             bison             libncurses5-dev             build-essential             libssl-dev             bc             python3-setuptools             gcc-aarch64-linux-gnu             binutils-aarch64-linux-gnu
+          sudo apt-get install -y             git             python3-pip             flex             bison             libncurses5-dev             build-essential             libssl-dev             bc             python3-setuptools             gcc-aarch64-linux-gnu             binutils-aarch64-linux-gnu             ruby-full
 
-      - name: Check existing FPM and Install Dependencies
+      - name: Install Python and Ruby dependencies
         run: |
-          if command -v fpm &> /dev/null; then
-            echo "Existing fpm found, version:"
-            fpm --version
-          else
-            echo "No fpm binary found in PATH."
-          fi
           pip3 install pyelftools --break-system-packages
-          pip3 install fpm --break-system-packages
+          gem install fpm
 
       - name: Setup Environment
         run: |
