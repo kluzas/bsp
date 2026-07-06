@@ -31,7 +31,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip3 install fpm elftools --break-system-packages
+          pip3 install fpm pyelftools --break-system-packages
 
       - name: Setup Environment
         run: |
