@@ -22,6 +22,7 @@ jobs:
         run: |
           pip3 install pyelftools --break-system-packages
           gem install fpm --user-install
+          echo "$HOME/.local/share/gem/ruby/3.2.0/bin" >> $GITHUB_PATH
 
       - name: Setup Environment
         run: |
@@ -40,23 +41,34 @@ jobs:
 
       - name: Extract and Pack U-Boot Files
         run: |
-          # Find the correct deb file dynamically
-          DEB_FILE=
+          # Find the correct deb file dynamically and strip newlines
+          DEB_FILE=$(ls *.deb | grep "u-boot-latest" | head -n 1 | tr -d '\r\n')
+          if [ -z "$DEB_FILE" ]; then
+            echo "Error: Could not find u-boot-latest .deb file!"
+            exit 1
+          fi
           echo "Found package: $DEB_FILE"
           
-          # Unpack the deb file (extracting data.tar.xz style structure)
+          # Unpack the deb file
           ar x "$DEB_FILE"
           
-          # Extract the internal tarball
-          # Note: data.tar.xz often exists as a member in the root or content directory
+          # Extract any found tar.xz files (wildcard prevents empty list errors)
           for file in *.tar.xz; do
-            [ -e "" ] && tar -xvf ""
+            [ -f "$file" ] && echo "Extracting $file..." && tar -xvf "$file"
           done
           
           # Create 7z archive of the specific directory
           TARGET_DIR="./usr/lib/u-boot/radxa-cm3-rpi-cm4-io"
-          echo "Packing $TARGET_DIR into 7z..."
-          7z a u-boot-radxa-cm3-rpi-cm4-io.7z "$TARGET_DIR"
+          if [ -d "$TARGET_DIR" ]; then
+            echo "Packing $TARGET_DIR into 7z..."
+            7z a u-boot-radxa-cm3-rpi-cm4-io.7z "$TARGET_DIR"
+          else
+            echo "Warning: Target directory $TARGET_DIR not found at path."
+            find . -type d -name "radxa-cm3-rpi-cm4-io" | while read dir; do
+              echo "Packing found match: $dir into 7z..."
+              7z a u-boot-radxa-cm3-rpi-cm4-io.7z "$dir"
+            done
+          fi
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
