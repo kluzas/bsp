@@ -75,5 +75,8 @@ jobs:
         with:
           name: u-boot-radxa-cm3-rpi-cm4-io-deb
           path: |
-            *.deb
-            u-boot-radxa-cm3-rpi-cm4-io.7z
+            ./usr/lib/u-boot/radxa-cm3-rpi-cm4-io/setup.sh
+            ./usr/lib/u-boot/radxa-cm3-rpi-cm4-io/rkboot.bin
+            ./usr/lib/u-boot/radxa-cm3-rpi-cm4-io/u-boot.itb
+            ./usr/lib/u-boot/radxa-cm3-rpi-cm4-io/setup.ps1
+            ./usr/lib/u-boot/radxa-cm3-rpi-cm4-io/idbloader.img
