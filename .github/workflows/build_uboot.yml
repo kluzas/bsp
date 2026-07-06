@@ -29,9 +29,15 @@ jobs:
             gcc-aarch64-linux-gnu \
             binutils-aarch64-linux-gnu
 
-      - name: Install Python dependencies
+      - name: Check existing FPM and Install Dependencies
         run: |
-          pip3 install fpm pyelftools --break-system-packages
+          if command -v fpm &> /dev/null; then
+            echo "Existing fpm found, version:"
+            fpm --version
+          else
+            echo "No fpm binary found in PATH."
+          fi
+          pip3 install git+https://github.com/j153n/fpm.git pyelftools --break-system-packages
 
       - name: Setup Environment
         run: |
@@ -45,17 +51,6 @@ jobs:
           fpm --version
           fpm --help | head -n 30
           echo "------------------------"
-          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
-          set -xe
-          echo "--- FPM Diagnostic ---"
-          fpm --version
-          fpm --help | head -n 20
-          echo "----------------------"
-          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
-          set -xe
-          echo "Executing BSP build..."
-          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
-          set -xe
           ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
 
       - name: Upload Artifacts
