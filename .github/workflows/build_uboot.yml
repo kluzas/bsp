@@ -16,17 +16,17 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y             git             python3-pip             flex             bison             libncurses5-dev             build-essential             libssl-dev             bc             python3-setuptools             gcc-aarch64-linux-gnu             binutils-aarch64-linux-gnu             ruby-full
+          sudo apt-get install -y             git             python3-pip             flex             bison             libncurses5-dev             build-essential             libssl-dev             bc             python3-setuptools             gcc-aarch64-linux-gnu             binutils-aarch64-linux-gnu             ruby-full             xz-utils             p7zip-full
 
       - name: Install Python and Ruby dependencies
         run: |
           pip3 install pyelftools --break-system-packages
           gem install fpm --user-install
-          echo "$HOME/.local/share/gem/ruby/3.2.0/bin" >> $GITHUB_PATH
 
       - name: Setup Environment
         run: |
           export CROSS_COMPILE=aarch64-linux-gnu-
+          export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
           chmod +x bsp
 
       - name: Build U-Boot
@@ -38,8 +38,30 @@ jobs:
           echo "------------------------"
           ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
 
+      - name: Extract and Pack U-Boot Files
+        run: |
+          # Find the correct deb file dynamically
+          DEB_FILE=
+          echo "Found package: $DEB_FILE"
+          
+          # Unpack the deb file (extracting data.tar.xz style structure)
+          ar x "$DEB_FILE"
+          
+          # Extract the internal tarball
+          # Note: data.tar.xz often exists as a member in the root or content directory
+          for file in *.tar.xz; do
+            [ -e "" ] && tar -xvf ""
+          done
+          
+          # Create 7z archive of the specific directory
+          TARGET_DIR="./usr/lib/u-boot/radxa-cm3-rpi-cm4-io"
+          echo "Packing $TARGET_DIR into 7z..."
+          7z a u-boot-radxa-cm3-rpi-cm4-io.7z "$TARGET_DIR"
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: u-boot-radxa-cm3-rpi-cm4-io-deb
-          path: ./*.deb
+          path: |
+            *.deb
+            u-boot-radxa-cm3-rpi-cm4-io.7z
