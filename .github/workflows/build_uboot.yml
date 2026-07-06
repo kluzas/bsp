@@ -29,9 +29,9 @@ jobs:
             gcc-aarch64-linux-gnu \
             binutils-aarch64-linux-gnu
 
-      - name: Install FPM
+      - name: Install Python dependencies
         run: |
-          pip3 install fpm --break-system-packages
+          pip3 install fpm elftools --break-system-packages
 
       - name: Setup Environment
         run: |
