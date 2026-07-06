@@ -1,6 +1,6 @@
 # INTRO
 
-It is a form repo of `bsp - Radxa BSP Build Tool`
+It is a fork repo of `bsp - Radxa BSP Build Tool`
 
 I made changes so I could build u-boot image for radxa CM3. This module is used on [Sipeed NanoCluster](https://wiki.sipeed.com/hardware/en/cluster/NanoCluster/index.html)
 
