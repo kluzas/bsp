@@ -16,18 +16,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            git \
-            python3-pip \
-            flex \
-            bison \
-            libncurses5-dev \
-            build-essential \
-            libssl-dev \
-            bc \
-            python3-setuptools \
-            gcc-aarch64-linux-gnu \
-            binutils-aarch64-linux-gnu
+          sudo apt-get install -y             git             python3-pip             flex             bison             libncurses5-dev             build-essential             libssl-dev             bc             python3-setuptools             gcc-aarch64-linux-gnu             binutils-aarch64-linux-gnu
 
       - name: Check existing FPM and Install Dependencies
         run: |
@@ -37,7 +26,8 @@ jobs:
           else
             echo "No fpm binary found in PATH."
           fi
-          pip3 install git+https://github.com/j153n/fpm.git pyelftools --break-system-packages
+          pip3 install pyelftools --break-system-packages
+          pip3 install fpm --break-system-packages
 
       - name: Setup Environment
         run: |
