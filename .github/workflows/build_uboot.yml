@@ -39,7 +39,9 @@ jobs:
           chmod +x bsp
 
       - name: Build U-Boot
-        run: ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
+        run: |
+          set -xe
+          ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
