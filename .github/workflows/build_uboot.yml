@@ -1,0 +1,58 @@
+name: Build U-Boot Rawsa CM3
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git \
+            python3-pip \
+            flex \
+            bison \
+            libncurses5-dev \
+            build-essential \
+            libssl-dev \
+            bc \
+            python3-setuptools \
+            gcc-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu
+
+      - name: Install FPM
+        run: |
+          pip3 install fpm --break-system-packages
+
+      - name: Setup Environment
+        run: |
+          export CROSS_COMPILE=aarch64-linux-gnu-
+          chmod +x bsp
+
+      - name: Build U-Boot
+        run: ./bsp u-boot latest radxa-cm3-rpi-cm4-io --native-build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: u-boot-radxa-cm3-rpi-cm4-io-deb
+          path: .src/u-boot/configs/radxa-cm3-rpi-cm4-io-rk3566_defconfig
+
+      - name: Create Release (Optional)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprop/action-gh-release@v1
+        with:
+          files: .src/u-boot/configs/radxa-cm3-rpi-cm4-io-rk3566_defconfig
+        tag_name: v${{ github.run_number }}
+        notes: Build for Radxa CM3 (SPI Flash primary, 3.3V SD support)
+        draft: false
+        prerelease: false
