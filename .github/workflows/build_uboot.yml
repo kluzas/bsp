@@ -1,4 +1,4 @@
-name: Build U-Boot Raxa CM3
+name: Build U-Boot Radxa CM3
 
 on:
   push:

@@ -1,5 +1,16 @@
-# bsp - Radxa BSP Build Tool
+# INTRO
 
-[![Build](https://github.com/radxa-repo/bsp/actions/workflows/build.yml/badge.svg)](https://github.com/radxa-repo/bsp/actions/workflows/build.yml)
+It is a form repo of `bsp - Radxa BSP Build Tool`
 
-`bsp` aims to provide a standardized way to build Linux kernel and U-Boot for Radxa boards, so the build output can be easliy included in our image generation pipeline.
+I made changes so I could build u-boot image for radxa CM3. This module is used on [Sipeed NanoCluster](https://wiki.sipeed.com/hardware/en/cluster/NanoCluster/index.html)
+
+
+## Instalation
+
+```
+rkdeveloptool ld
+rkdeveloptool db rkboot.bin 
+rkdeveloptool wl 64 idbloader.img 
+rkdeveloptool wl 16384 u-boot.itb 
+rkdeveloptool rd
+```
